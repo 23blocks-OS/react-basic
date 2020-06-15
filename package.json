@@ -9,11 +9,13 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "formik": "^2.1.4",
+    "json-api-normalizer": "^0.4.16",
     "lodash": "^4.17.15",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "redux-object": "^0.5.10",
     "rxjs": "^6.5.5",
     "yup": "^0.29.1"
   },
