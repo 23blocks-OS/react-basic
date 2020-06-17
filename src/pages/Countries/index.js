@@ -21,16 +21,20 @@ export default function Countries() {
   let [searchText, setSearchText] = useState('');
 
   useEffect(() => {
-    getFrom(`counties/?state=&search=${searchText}`)
-      .then((response) => {
-        console.log(response);
-        const normalizedDataObject = normalize(response.data);
-        const countiesArray = build(normalizedDataObject, 'county');
-        setCountries(countiesArray ? countiesArray : []);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (!searchText) {
+      setCountries([]);
+    } else {
+      getFrom(`counties/?state=&search=${searchText}`)
+        .then((response) => {
+          console.log(response);
+          const normalizedDataObject = normalize(response.data);
+          const countiesArray = build(normalizedDataObject, 'county');
+          setCountries(countiesArray ? countiesArray : []);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, [searchText]);
 
   return (
@@ -51,7 +55,7 @@ export default function Countries() {
               </TableHead>
               <TableBody>
                 {countries.map((country) => (
-                  <TableRow key={country.id}>
+                  <TableRow key={country.id} data-testid="table-row">
                     <TableCell component="th" scope="row">
                       {country.name}
                     </TableCell>
