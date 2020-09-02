@@ -27,6 +27,10 @@ export default function Countries() {
       getFrom(`counties/?state=&search=${searchText}`)
         .then((response) => {
           console.log(response);
+          /* Data serialization, normalize() flattens the data object,
+            build method takes the flattened object and the object "type" attribute that
+            needs to be serialized and returns an array of objects
+          */
           const normalizedDataObject = normalize(response.data);
           const countiesArray = build(normalizedDataObject, 'county');
           setCountries(countiesArray ? countiesArray : []);
