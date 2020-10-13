@@ -13,6 +13,7 @@ import { LoginContext } from './context';
 import './App.css';
 
 import { setApiKey } from './api/api';
+import ProductsView from './pages/Products';
 
 // Call function to add APPID header into axios requests to API
 setApiKey();
@@ -36,6 +37,9 @@ function App() {
             </Route>
             <Route path="/profile">
               <Profile />
+            </Route>
+            <Route path="/products">
+              <ProductsView />
             </Route>
             <Route path="/">
               <Home />
