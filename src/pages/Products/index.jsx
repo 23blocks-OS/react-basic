@@ -12,9 +12,14 @@ const ProductsView = () => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [productDetails, setProductDetails] = useState(null);
+
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
   const [isLoadingProductDetails, setIsLoadingProductDetails] = useState(false);
+
+  const [selectedProductSuggestions, setSelectedProductSuggestions] = useState(null);
+  const [productSuggestions, setProductSuggestions] = useState([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
   // Get categories
   useEffect(() => {
@@ -40,7 +45,7 @@ const ProductsView = () => {
     }
   }, [selectedCategory]);
 
-  // Get product details
+  // Get product details and suggestions
   useEffect(() => {
     selectedProduct &&
       getFrom('/products/' + selectedProduct.uniqueId).then((apiResponse) => {
@@ -50,17 +55,44 @@ const ProductsView = () => {
         });
         setProductDetails(_product);
         setIsLoadingProductDetails(false);
+        console.log(apiResponse);
       });
   }, [selectedProduct]);
 
+  // Get product suggestions
+  useEffect(() => {
+    selectedProductSuggestions &&
+      getFrom(
+        '/products/' + selectedProductSuggestions.uniqueId + '/suggestions'
+      ).then((apiResponse) => {
+        const data = normalize(apiResponse.data);
+        const _products = build(data, 'product', null, { eager: true });
+        setProductSuggestions(_products ? _products : []);
+        setIsLoadingSuggestions(false);
+      });
+  }, [selectedProductSuggestions]);
+
   const handleSelectedCategory = (elem) => {
-    setIsLoadingProducts(true);
-    setSelectedCategory(elem);
+    if (selectedCategory !== elem) {
+      setIsLoadingProducts(true);
+      setSelectedCategory(elem);
+      setSelectedProduct(null);
+      setSelectedProductSuggestions(null);
+    }
   };
 
   const handleSelectedProduct = (elem) => {
-    setIsLoadingProductDetails(true);
-    setSelectedProduct(elem);
+    if (selectedProduct !== elem) {
+      setIsLoadingProductDetails(true);
+      setSelectedProduct(elem);
+    }
+  };
+
+  const handleSelectedProductDetails = (elem) => {
+    if (selectedProductSuggestions !== elem) {
+      setIsLoadingSuggestions(true);
+      setSelectedProductSuggestions(elem);
+    }
   };
 
   return (
@@ -83,12 +115,22 @@ const ProductsView = () => {
             products={products}
             handleSelected={handleSelectedProduct}
             isLoading={isLoadingProducts}
+            title="Products"
           />
         )}
-        {productDetails && (
+        {selectedProduct && (
           <ProductDetails
             product={productDetails}
             isLoading={isLoadingProductDetails}
+            handleSelected={handleSelectedProductDetails}
+          />
+        )}
+        {selectedProductSuggestions && (
+          <Products
+            products={productSuggestions}
+            handleSelected={(elem) => console.log(elem, 'Producto Sugerido')}
+            isLoading={isLoadingSuggestions}
+            title="Suggested Products"
           />
         )}
       </div>

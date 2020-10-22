@@ -25,15 +25,15 @@ const useStyles = makeStyles({
     paddingLeft: '16px',
     paddingRight: '16px',
   },
-  button: {
-    paddingLeft: '24px',
+  cardActions: {
+    justifyContent: 'center',
   },
   pos: {
     marginBottom: 0,
   },
 });
 
-export default function ProductDetails({ product, isLoading }) {
+export default function ProductDetails({ product, isLoading, handleSelected }) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
@@ -73,9 +73,14 @@ export default function ProductDetails({ product, isLoading }) {
       </CardContent>
 
       {!isLoading && (
-        <CardActions>
-          <Button size="small" className={classes.button}>
-            Learn More
+        <CardActions className={classes.cardActions}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => handleSelected(product)}
+          >
+            Get suggestions
           </Button>
         </CardActions>
       )}
