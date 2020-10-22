@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { get } from 'lodash';
 
-export const instance = axios.create({
-  baseURL: 'https://stage-gateway.23blocks.com',
+export const productsInstance = axios.create({
+  baseURL: 'https://stage-products.23blocks.com',
 });
 
-instance.interceptors.response.use(
+productsInstance.interceptors.response.use(
   function (response) {
     return response;
   },
@@ -26,20 +26,20 @@ function formatErrorResponse(error) {
 
 // Add 'APPID' header to axios requests
 export function setApiKey() {
-  console.log('Setting api key', process.env.REACT_APP_API_KEY);
-  instance.defaults.headers.common['APPID'] = process.env.REACT_APP_API_KEY;
+  console.log('Setting products api key', process.env.REACT_APP_RESTTOGO_API_KEY);
+  productsInstance.defaults.headers.common['APPID'] = process.env.REACT_APP_API_KEY;
 }
 
 // Add 'company-Token' header to axios requests
 export function setCompanyToken() {
   console.log('Setting company token', process.env.REACT_APP_COMPANY_TOKEN);
-  instance.defaults.headers.common['company-token'] =
+  productsInstance.defaults.headers.common['company-token'] =
     process.env.REACT_APP_COMPANY_TOKEN;
 }
 
 // Send form data to API POST request
 export function sendFormData(url, data) {
-  return instance({
+  return productsInstance({
     method: 'post',
     url,
     data: objectToFormData(data),
@@ -49,7 +49,7 @@ export function sendFormData(url, data) {
 
 // Standard GET request from API
 export function getFrom(url) {
-  return instance({
+  return productsInstance({
     method: 'get',
     url,
   });
