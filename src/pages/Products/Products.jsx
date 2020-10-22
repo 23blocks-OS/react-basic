@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Products({ products, handleSelected, isLoading }) {
+export default function Products({ products, handleSelected, isLoading, title }) {
   const classes = useStyles();
 
   return (
@@ -36,7 +36,7 @@ export default function Products({ products, handleSelected, isLoading }) {
         {!isLoading ? (
           <>
             <Typography className={classes.title} color="textSecondary" gutterBottom>
-              {products.length ? 'Products' : 'No Products in this category'}
+              {products.length ? title : 'No Products'}
             </Typography>
             <div className={classes.demo}>
               <List dense={false}>
