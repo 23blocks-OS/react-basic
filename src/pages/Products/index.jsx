@@ -5,6 +5,9 @@ import build from 'redux-object';
 import Categories from './Categories';
 import Products from './Products';
 import ProductDetails from './ProductDetails';
+import { selectUserId } from '../../redux/user/user.selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCartAsync } from '../../redux/order/order.actions';
 
 const ProductsView = () => {
   const [categories, setCategories] = useState([]);
@@ -23,8 +26,6 @@ const ProductsView = () => {
 
   // Get categories
   useEffect(() => {
-    setApiKey();
-    setCompanyToken();
     getFrom('/categories').then((apiResponse) => {
       const data = normalize(apiResponse.data);
       const _categories = build(data, 'category', null, { eager: true });
@@ -95,6 +96,13 @@ const ProductsView = () => {
     }
   };
 
+  const userId = useSelector(selectUserId);
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (prod) => {
+    dispatch(addToCartAsync(userId, prod, 1));
+  };
+
   return (
     <div>
       <h3 style={{ marginLeft: '15px' }}>Products View</h3>
@@ -123,6 +131,7 @@ const ProductsView = () => {
             product={productDetails}
             isLoading={isLoadingProductDetails}
             handleSelected={handleSelectedProductDetails}
+            addToCart={handleAddToCart}
           />
         )}
         {selectedProductSuggestions && (
