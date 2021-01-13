@@ -33,7 +33,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ProductDetails({ product, isLoading, handleSelected }) {
+export default function ProductDetails({
+  product,
+  isLoading,
+  handleSelected,
+  addToCart,
+}) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
@@ -81,6 +86,14 @@ export default function ProductDetails({ product, isLoading, handleSelected }) {
             onClick={() => handleSelected(product)}
           >
             Get suggestions
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => addToCart(product)}
+          >
+            Add to Cart
           </Button>
         </CardActions>
       )}
