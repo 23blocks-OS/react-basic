@@ -12,11 +12,12 @@ import { LoginContext } from './context';
 
 import './App.css';
 
-import { setApiKey } from './api/api';
 import ProductsView from './pages/Products';
+import store from './redux/store';
+import { validateTokenAsync } from './redux/user/user.actions';
+import CartView from './pages/Cart';
 
-// Call function to add APPID header into axios requests to API
-setApiKey();
+store.dispatch(validateTokenAsync());
 
 function App() {
   const [loginData, setLoginData] = useState(null);
@@ -40,6 +41,9 @@ function App() {
             </Route>
             <Route path="/products">
               <ProductsView />
+            </Route>
+            <Route path="/cart">
+              <CartView />
             </Route>
             <Route path="/">
               <Home />

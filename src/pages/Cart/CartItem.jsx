@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
+    maxWidth: '40vw',
+    marginBottom: '0.5rem',
   },
   bullet: {
     display: 'inline-block',
@@ -33,10 +35,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ProductDetails({
+export default function CartItem({
   product,
   isLoading,
-  handleSelected,
+  removeAll,
+  removeFromCart,
   addToCart,
 }) {
   const classes = useStyles();
@@ -47,26 +50,24 @@ export default function ProductDetails({
       <CardContent>
         {!isLoading ? (
           <>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
+            {/* <Typography className={classes.title} color="textSecondary" gutterBottom>
               Product Details
-            </Typography>
+            </Typography> */}
             <div className={classes.content}>
               <Typography variant="h5" component="h2" className={classes.name}>
-                {product.name}
+                {product.productName}
               </Typography>
               <Typography className={classes.pos} color="textSecondary">
-                {product.description}
+                {product.productDescription}
               </Typography>
               <Typography variant="body2" component="p">
-                <b>Price:</b> ${product.price}
+                <b>Qty:</b> ${product.quantity}
                 <br />
-                <b>Discount:</b> ${product.discount}
+                <b>Price:</b> ${product.subtotal}
                 <br />
                 <b>Tax:</b> ${product.tax}
                 <br />
-                <b>Sku:</b> {product.sku}
-                <br />
-                <b>Status:</b> {product.status}
+                <b>Sku:</b> {product.productSku}
               </Typography>
             </div>
           </>
@@ -83,17 +84,25 @@ export default function ProductDetails({
             size="small"
             variant="contained"
             color="primary"
-            onClick={() => handleSelected(product)}
+            onClick={() => addToCart(product)}
           >
-            Get suggestions
+            +
           </Button>
           <Button
             size="small"
             variant="contained"
             color="primary"
-            onClick={() => addToCart(product)}
+            onClick={() => removeFromCart(product)}
           >
-            Add to Cart
+            -
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => removeAll(product)}
+          >
+            Remove All
           </Button>
         </CardActions>
       )}
