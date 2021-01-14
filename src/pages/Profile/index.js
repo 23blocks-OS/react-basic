@@ -1,14 +1,13 @@
-import React, { useContext, useState } from 'react';
-import { LoginContext } from '../../context';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
-import normalize from 'json-api-normalizer';
-import build from 'redux-object';
-
-import { getFrom, setCompanyToken } from '../../api/api';
-
 import ProfileCard from './profileCard';
 import UserCard from './userCard';
+import {
+  selectCurrentAuthUser,
+  selectUserProfile,
+} from '../../redux/user/user.selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProfile } from '../../redux/user/user.actions';
 
 const useStyles = makeStyles({
   root: {
@@ -31,33 +30,28 @@ const useStyles = makeStyles({
 });
 
 const Profile = () => {
-  const [loginData, setLoginData] = useContext(LoginContext);
   const [profileData, setProfileData] = useState(null);
+
+  const dispatch = useDispatch();
+  const user = useSelector(selectCurrentAuthUser);
+  const userProfile = useSelector(selectUserProfile);
+
+  useEffect(() => {
+    setProfileData(userProfile);
+  }, [userProfile]);
+
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
   const handleClick = () => {
-    // Set company-token header for axios request
-    setCompanyToken();
-    getFrom(`/users/${loginData.uniqueId}/profile`).then(
-      (response) => {
-        // Standard Response from service
-        console.log(response);
-        const normalizedDataObject = normalize(response.data);
-        const serializedData = build(normalizedDataObject, 'userProfile');
-        setProfileData(serializedData[0]);
-        // Serialized Data
-        console.log(serializedData[0]);
-      },
-      (error) => console.log(error)
-    );
+    dispatch(getProfile(user.uniqueId));
   };
 
   return (
     <>
       <UserCard
         classes={classes}
-        loginData={loginData}
+        loginData={user}
         handleClick={handleClick}
         profileData={profileData}
       />

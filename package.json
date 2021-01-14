@@ -13,9 +13,13 @@
     "lodash": "^4.17.15",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
     "redux-object": "^0.5.10",
+    "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
     "rxjs": "^6.5.5",
     "yup": "^0.29.1"
   },
@@ -47,6 +51,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^2.5.1",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "redux-logger": "^3.0.6"
   }
 }

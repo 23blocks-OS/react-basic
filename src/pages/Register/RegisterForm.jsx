@@ -1,75 +1,70 @@
-import React, {useState} from "react"
-import { Link } from "react-router-dom"
-import { Formik, Form } from "formik"
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { Formik, Form } from 'formik';
 
-import TextField from "@material-ui/core/TextField"
-import Button from "@material-ui/core/Button"
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
-import {get} from 'lodash';
+import FormSchema from './RegisterSchema';
 
-import FormSchema from "./RegisterSchema" 
-
-import { sendFormData } from '../../api/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser } from '../../redux/user/user.actions';
 
 export default function RegisterForm() {
-
   let [submitError, setSubtmitError] = useState('');
+
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    user.isAuthenticated && history.push('/profile');
+  }, [user, history]);
+
+  const handleSubmit = (values) => {
+    dispatch(registerUser(values));
+  };
 
   return (
     <Formik
-      initialValues={{ email: "", password: "", name: "" }}
+      initialValues={{ email: '', password: '', name: '' }}
       validationSchema={FormSchema}
-      onSubmit={values => {
-        // same shape as initial values
-
-        sendFormData('/auth/', {
-            "user[provider]": 'email',
-            "user[email]": values.email,
-            "user[password]": values.password,
-            "user[username]": values.email,
-            "user[uid]": values.email,
-            "user[name]": values.name,
-            confirm_success_url: 'http://app.thecompanytool.com/step2',
-            subscription: '318f1533-8dd9-4a7d-8b36-9b04a7c2363f'
-        }).then((success) => {
-          console.log(success)
-        }).catch((error) => {
-          setSubtmitError(get(error,'errorDetail', 'Please try again.'));
-        })
-        
+      onSubmit={(values) => {
+        handleSubmit(values);
       }}
     >
-      {({ values, errors, handleChange }) => (
+      {({ values, errors, touched, setFieldValue }) => (
         <Form>
-          <div data-testid="register-form" style={{ marginBottom: "25px" }}>
+          <div data-testid="register-form" style={{ marginBottom: '25px' }}>
             <TextField
               label="Email"
               variant="outlined"
               fullWidth
               name="email"
               value={values.email}
-              onChange={handleChange}
-              helperText={errors['email']}
-              error={errors['email']}
-              inputProps={{ "data-testid": "email-input" }}
+              onChange={(e) => setFieldValue('email', e.target.value)}
+              helperText={touched.email && errors['email']}
+              error={touched.email && Boolean(errors['email'])}
+              inputProps={{ 'data-testid': 'email-input' }}
             />
           </div>
 
-          <div style={{ marginBottom: "25px" }}>
+          <div style={{ marginBottom: '25px' }}>
             <TextField
               label="Name"
               variant="outlined"
               fullWidth
               name="name"
               value={values.name}
-              onChange={handleChange}
-              helperText={errors['name']}
-              error={errors['name']}
-              inputProps={{ "data-testid": "name-input" }}
+              onChange={(e) => setFieldValue('name', e.target.value)}
+              helperText={touched.name && errors['name']}
+              error={touched.name && Boolean(errors['name'])}
+              inputProps={{ 'data-testid': 'name-input' }}
             />
           </div>
 
-          <div style={{ marginBottom: "25px" }}>
+          <div style={{ marginBottom: '25px' }}>
             <TextField
               label="Password"
               variant="outlined"
@@ -77,14 +72,14 @@ export default function RegisterForm() {
               name="password"
               type="password"
               value={values.password}
-              onChange={handleChange}
-              helperText={errors['password']}
-              error={errors['password']}
-              inputProps={{ "data-testid": "password-input" }}
+              onChange={(e) => setFieldValue('password', e.target.value)}
+              helperText={touched.password && errors['password']}
+              error={touched.password && Boolean(errors['password'])}
+              inputProps={{ 'data-testid': 'password-input' }}
             />
           </div>
 
-          <div style={{ marginBottom: "25px" }}>
+          <div style={{ marginBottom: '25px' }}>
             <TextField
               label="Confirm password"
               variant="outlined"
@@ -92,16 +87,18 @@ export default function RegisterForm() {
               name="passwordConfirm"
               type="password"
               value={values.confirmPassword}
-              onChange={handleChange}
-              helperText={errors['passwordConfirm']}
-              error={errors['passwordConfirm']}
-              inputProps={{ "data-testid": "confirm-password-input" }}
+              onChange={(e) => setFieldValue('passwordConfirm', e.target.value)}
+              helperText={touched.confirmPassword && errors['passwordConfirm']}
+              error={touched.confirmPassword && Boolean(errors['passwordConfirm'])}
+              inputProps={{ 'data-testid': 'confirm-password-input' }}
             />
           </div>
 
-          {submitError && <div>
-            <p style={{color: 'red', fontWeight: 'bold'}}>{submitError}</p>
-          </div>}
+          {submitError && (
+            <div>
+              <p style={{ color: 'red', fontWeight: 'bold' }}>{submitError}</p>
+            </div>
+          )}
 
           <Button type="submit" variant="contained" color="primary" fullWidth>
             Sign up
@@ -112,5 +109,5 @@ export default function RegisterForm() {
         </Form>
       )}
     </Formik>
-  )
+  );
 }
