@@ -50,24 +50,27 @@ export default function CartItem({
       <CardContent>
         {!isLoading ? (
           <>
-            {/* <Typography className={classes.title} color="textSecondary" gutterBottom>
-              Product Details
-            </Typography> */}
             <div className={classes.content}>
               <Typography variant="h5" component="h2" className={classes.name}>
-                {product.productName}
+                {product.name}
               </Typography>
               <Typography className={classes.pos} color="textSecondary">
-                {product.productDescription}
+                {product.description}
               </Typography>
               <Typography variant="body2" component="p">
-                <b>Qty:</b> ${product.quantity}
+                <b>Category:</b> {product.categoryName}
+                <br />
+                <b>Qty:</b> {product.quantity}
                 <br />
                 <b>Price:</b> ${product.subtotal}
                 <br />
                 <b>Tax:</b> ${product.tax}
                 <br />
-                <b>Sku:</b> {product.productSku}
+                <b>Subtotal:</b> ${product.subtotal}
+                <br />
+                <b>Subtotal Tax:</b> ${product.subtotalTax}
+                <br />
+                <b>Sku:</b> {product.sku}
               </Typography>
             </div>
           </>
@@ -81,7 +84,7 @@ export default function CartItem({
       {!isLoading && (
         <CardActions className={classes.cardActions}>
           <Button
-            size="small"
+            size="medium"
             variant="contained"
             color="primary"
             onClick={() => addToCart(product)}
@@ -89,9 +92,9 @@ export default function CartItem({
             +
           </Button>
           <Button
-            size="small"
+            size="medium"
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => removeFromCart(product)}
           >
             -
