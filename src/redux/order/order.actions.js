@@ -37,20 +37,9 @@ export const cartCreated = () => ({
   type: OrderTypes.CART_CREATED,
 });
 
-export const addToCartAsync = (userId, item, qty) => {
+export const updateCartAsync = (userId, item, qty, category) => {
   return async (dispatch, getState) => {
-    const apiResponse = await updateCartItemQty(userId, item, qty);
-    const data = normalize(apiResponse.data);
-    const _products = build(data, 'cartDetail', null, {
-      eager: true,
-    });
-    dispatch(cartLoaded(_products ? _products : []));
-  };
-};
-
-export const removeFromCartAsync = (userId, item, qty) => {
-  return async (dispatch, getState) => {
-    const apiResponse = await updateCartItemQty(userId, item, qty);
+    const apiResponse = await updateCartItemQty(userId, item, qty, category);
     const data = normalize(apiResponse.data);
     const _products = build(data, 'cartDetail', null, {
       eager: true,
@@ -93,7 +82,9 @@ export const deleteCartContent = (userId) => {
   return async (dispatch, getState) => {
     try {
       getState().order.orderItems.forEach((item) => {
-        dispatch(removeFromCartAsync(userId, item, -item.quantity));
+        dispatch(
+          updateCartAsync(userId, item, -item.quantity, { name: '', uniqueId: '' })
+        );
       });
     } catch (err) {
       console.log(err, 'err creating cart');
