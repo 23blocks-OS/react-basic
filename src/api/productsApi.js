@@ -80,16 +80,18 @@ export function sendPutRequest(url, data) {
   });
 }
 
-export function updateCartItemQty(userId, item, qty) {
+export function updateCartItemQty(userId, item, qty, category) {
   return productsInstance({
     method: 'put',
     url: '/carts/',
     data: objectToFormData({
       'cart[user_unique_id]': userId,
-      'cart[notes]': '',
+      'cart[notes]': 'notes',
       'product[sku]': item.sku || item.productSku,
-      'product[notes]': '',
+      'product[notes]': 'notes',
       'product[quantity]': qty,
+      'product[category_name]': category.name,
+      'product[category_unique_id]': category.uniqueId,
     }),
     headers: { 'Content-Type': 'multipart/form-data' },
   });

@@ -7,7 +7,7 @@ import Products from './Products';
 import ProductDetails from './ProductDetails';
 import { selectUserId } from '../../redux/user/user.selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCartAsync } from '../../redux/order/order.actions';
+import { updateCartAsync } from '../../redux/order/order.actions';
 
 const ProductsView = () => {
   const [categories, setCategories] = useState([]);
@@ -100,7 +100,7 @@ const ProductsView = () => {
   const dispatch = useDispatch();
 
   const handleAddToCart = (prod) => {
-    dispatch(addToCartAsync(userId, prod, 1));
+    dispatch(updateCartAsync(userId, prod, 1, selectedCategory));
   };
 
   return (
